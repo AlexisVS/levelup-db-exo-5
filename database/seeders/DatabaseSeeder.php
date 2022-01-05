@@ -4,12 +4,14 @@ namespace Database\Seeders;
 
 use App\Models\Consultation;
 use App\Models\Docteur;
+use App\Models\Dossier_medicale;
+use App\Models\Dossier_medicale_status;
 use App\Models\Local;
+use App\Models\Maladie;
 use App\Models\Patient;
-use Carbon\Carbon;
-use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Seeder;
+use Faker\Factory as Faker;
 
 class DatabaseSeeder extends Seeder
 {
@@ -26,6 +28,7 @@ class DatabaseSeeder extends Seeder
             HopitalSeeder::class,
             MaladieSeeder::class,
             LocalTypeSeeder::class,
+            DossierMedicaleStatusesSeeder::class,
             ConsultationStatusSeeder::class,
         ]);
 
@@ -38,17 +41,30 @@ class DatabaseSeeder extends Seeder
 
         Local::factory()->count(150)->create();
 
-        Consultation::factory()->count(200)->state(new Sequence(
-            fn ($sequence) => ['docteur_id' => Docteur::all()->random()->id],
-            fn ($sequence) => ['numero_registre_national' => Patient::all()->random()->numero_registre_national],
+        $consultations = Consultation::factory()->count(200)->state(new Sequence(
+            ['consultation_status_id' => 1],
+            ['consultation_status_id' => 1],
+            ['consultation_status_id' => 1],
+            ['consultation_status_id' => 1],
             ['consultation_status_id' => 1],
             ['consultation_status_id' => 1],
             ['consultation_status_id' => 1],
             ['consultation_status_id' => 2],
-            fn ($sequence) => ['local_id' => Local::all()->random()->id],
-            fn ($sequence) => ['consultation_date' => Carbon::now()->between('2021-06-01', '2022-01-31')],
-            ['pass_consultation' => true],
-            ['pass_consultation' => false],
+            ['consultation_status_id' => 3],
+            ['consultation_status_id' => 4],
         ))->create();
+
+        foreach ($consultations as $consultation) {
+            if ($consultation->consultation_status_id == 1 && Patient::all()->find('numero_registre_national', $consultation->numero_registre_national) ) {
+                Dossier_medicale::factory()->state(
+                    new Sequence(
+                        fn ($sequence) => [
+                            'numero_registre_national' => $consultation->numero_registre_national,
+                            'consultation_id' => $consultation->id,
+                        ]
+                    )
+                )->create();
+            }
+        }
     }
 }

@@ -19,7 +19,13 @@ class ConsultationStatusSeeder extends Seeder
                 'status' => 'Fait',
             ],
             [
-                'status' => 'Pas Fait',
+                'status' => 'planifié',
+            ],
+            [
+                'status' => 'annulé',
+            ],
+            [
+                'status' => 'raté',
             ],
         ]);
     }

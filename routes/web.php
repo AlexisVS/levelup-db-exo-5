@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HopitalController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +15,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('Home');
+});
+Route::resource('/hopitals', HopitalController::class);
+Route::get('/patients', function () {
+    return view('pages.patients.index');
+});
+
+Route::get('/patients/dossier-medicale/{patientId}', function ($patientId) {
+    $data = [
+        'patientId' => $patientId
+    ];
+
+    return view('pages.patients.dossier_medicale.dossierMedicale', $data);
 });

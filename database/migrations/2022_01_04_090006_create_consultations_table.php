@@ -20,7 +20,7 @@ class CreateConsultationsTable extends Migration
             $table->foreign('numero_registre_national')->references('numero_registre_national')->on('patients');
             $table->foreignId('consultation_status_id')->constrained();
             $table->foreignId('local_id')->constrained();
-            $table->date('consultation_date');
+            $table->string('consultation_date');
             $table->boolean('pass_consultation');
             $table->timestamps();
         });
